@@ -454,8 +454,8 @@ export async function upgradeAsync(
   // Clear metro bundler cache
   log.addNewLineIfNone();
   log(chalk.bold.underline('Clearing the packager cache...'));
-  await Project.startReactNativeServerAsync(projectRoot, { reset: true, nonPersistent: true });
-  await Project.stopReactNativeServerAsync(projectRoot);
+  await Project.startMetroAsync(projectRoot, { reset: true, nonPersistent: true });
+  await Project.stopMetroAsync(projectRoot);
 
   log.addNewLineIfNone();
   log(chalk.underline.bold.green(`Automated upgrade steps complete.`));
