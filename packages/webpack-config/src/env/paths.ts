@@ -47,7 +47,12 @@ function parsePaths(projectRoot: string, mode: Mode, nativeAppManifest?: ExpoCon
     includeModule: getIncludeModule,
     packageJson: packageJsonPath,
     root: path.resolve(inputProjectRoot),
-    appMain: getEntryPoint(inputProjectRoot, ['./index', './src/index'], ['web']),
+    appMain: getEntryPoint(
+      inputProjectRoot,
+      ['./index', './src/index'],
+      ['web'],
+      getConfigMode(mode)
+    ),
     modules: modulesPath,
     servedPath: getServedPath(inputProjectRoot, mode),
     template: {

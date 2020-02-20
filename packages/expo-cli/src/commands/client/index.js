@@ -1,4 +1,3 @@
-import * as ConfigUtils from '@expo/config';
 import { Android, Simulator, UserManager, Versions } from '@expo/xdl';
 import chalk from 'chalk';
 import CliTable from 'cli-table';
@@ -7,6 +6,7 @@ import _ from 'lodash';
 import ora from 'ora';
 import path from 'path';
 
+import { fileExistsAsync, getConfig, readConfigJsonAsync } from '@expo/config';
 import CommandError from '../../CommandError';
 import log from '../../log';
 import prompt from '../../prompt';
@@ -46,8 +46,8 @@ export default program => {
       // Note: this is the current developer's project, NOT the Expo client's manifest
       const spinner = ora(`Finding custom configuration for the Expo client...`).start();
       const appJsonPath = options.config || path.join(projectDir, 'app.json');
-      const appJsonExists = await ConfigUtils.fileExistsAsync(appJsonPath);
-      const { exp } = appJsonExists ? await ConfigUtils.readConfigJsonAsync(projectDir) : {};
+      const appJsonExists = await fileExistsAsync(appJsonPath);
+      const { exp } = appJsonExists ? await readConfigJsonAsync(projectDir) : {};
 
       if (exp) {
         spinner.succeed(`Found custom configuration for the Expo client at ${appJsonPath}`);
@@ -264,7 +264,10 @@ export default program => {
     .command('client:install:ios')
     .description('Install the Expo client for iOS on the simulator')
     .asyncAction(async () => {
-      const currentSdkConfig = await ClientUpgradeUtils.getExpoSdkConfig(process.cwd());
+      const currentSdkConfig = await getConfig(process.cwd(), {
+        mode: 'development',
+        skipSDKVersionRequirement: false,
+      });
       const currentSdkVersion = currentSdkConfig ? currentSdkConfig.sdkVersion : undefined;
 
       if (!currentSdkVersion) {
