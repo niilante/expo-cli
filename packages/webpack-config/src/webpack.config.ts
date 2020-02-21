@@ -113,9 +113,12 @@ export default async function(
 
   const { build: buildConfig = {} } = config.web || {};
 
-  const devtool = getDevtool({ production: isProd, development: isDev }, buildConfig as {
-    devtool: Options.Devtool;
-  });
+  const devtool = getDevtool(
+    { production: isProd, development: isDev },
+    buildConfig as {
+      devtool: Options.Devtool;
+    }
+  );
 
   const appEntry: string[] = [];
 
