@@ -44,7 +44,7 @@ async function getUpdatedDependenciesAsync(
   let result: DependencyList = {};
 
   // Get the updated version for any bundled modules
-  let { exp, pkg } = await ConfigUtils.readConfigJsonAsync(projectRoot);
+  let { exp, pkg } = ConfigUtils.getConfig(projectRoot, { mode: 'development' });
   let bundledNativeModules = (await JsonFile.readAsync(
     ConfigUtils.resolveModule('expo/bundledNativeModules.json', projectRoot, exp)
   )) as DependencyList;
@@ -102,7 +102,7 @@ async function getUpdatedDependenciesAsync(
 
 async function upgradeAsync(requestedSdkVersion: string | null, options: Options) {
   let { projectRoot, workflow } = await findProjectRootAsync(process.cwd());
-  let { exp, pkg } = await ConfigUtils.readConfigJsonAsync(projectRoot);
+  let { exp, pkg } = ConfigUtils.getConfig(projectRoot, { mode: 'development' });
   let isGitStatusClean = await validateGitStatusAsync();
   log.newLine();
 
