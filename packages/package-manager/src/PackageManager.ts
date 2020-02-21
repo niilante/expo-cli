@@ -19,13 +19,17 @@ const yarnPeerDependencyWarningPattern = new RegExp(
   'g'
 );
 
+/**
+ * Returns true if the project is using yarn, false if the project is using npm.
+ *
+ * @param projectRoot
+ */
 export function isUsingYarn(projectRoot: string): boolean {
   const workspaceRoot = findWorkspaceRoot(projectRoot);
   if (workspaceRoot) {
     return fs.existsSync(path.join(workspaceRoot, 'yarn.lock'));
-  } else {
-    return fs.existsSync(path.join(projectRoot, 'yarn.lock'));
   }
+  return fs.existsSync(path.join(projectRoot, 'yarn.lock'));
 }
 
 class NpmStderrTransform extends Transform {
@@ -121,15 +125,13 @@ export class NpmPackageManager implements PackageManager {
       versioned: npmPackageArg.Result[];
       unversioned: npmPackageArg.Result[];
     } = { versioned: [], unversioned: [] };
-    names
-      .map(name => npmPackageArg(name))
-      .forEach(spec => {
-        if (spec.rawSpec) {
-          result.versioned.push(spec);
-        } else {
-          result.unversioned.push(spec);
-        }
-      });
+    names.map(name => npmPackageArg(name)).forEach(spec => {
+      if (spec.rawSpec) {
+        result.versioned.push(spec);
+      } else {
+        result.unversioned.push(spec);
+      }
+    });
     return result;
   }
 
@@ -196,7 +198,10 @@ export class YarnPackageManager implements PackageManager {
 
 export type CreateForProjectOptions = { npm?: boolean; yarn?: boolean; log?: Logger };
 
-export function createForProject(projectRoot: string, options: CreateForProjectOptions = {}) {
+export function createForProject(
+  projectRoot: string,
+  options: CreateForProjectOptions = {}
+): NpmPackageManager | YarnPackageManager {
   let PackageManager;
   if (options.npm) {
     PackageManager = NpmPackageManager;

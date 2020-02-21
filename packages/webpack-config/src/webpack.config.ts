@@ -122,10 +122,6 @@ export default async function(
   // In solutions like Gatsby the main entry point doesn't need to be known.
   if (locations.appMain) {
     appEntry.push(locations.appMain);
-  } else {
-    throw new Error(
-      `The entry point for your project couldn't be found. Please define it in the package.json main field`
-    );
   }
 
   // Add a loose requirement on the ResizeObserver polyfill if it's installed...
