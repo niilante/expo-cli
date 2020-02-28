@@ -19,6 +19,19 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "__mocks__",
+      "src"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json"
+    ],
+    "resetModules": false
+  },
   "bin": {
     "expo": "./bin/expo.js",
     "expo-cli": "./bin/expo.js"
@@ -56,6 +69,7 @@
     "@types/progress": "^2.0.3",
     "@types/slash": "^2.0.0",
     "@types/split": "^1.0.0",
+    "@types/targz": "^1.0.0",
     "@types/wordwrap": "^1.0.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
