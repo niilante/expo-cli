@@ -12,6 +12,7 @@ export type CredentialMetadata = {
   experienceName: string;
   bundleIdentifier?: string;
   platform: string;
+  only?: any;
 };
 
 export { Ios };

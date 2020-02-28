@@ -7,7 +7,10 @@ import { findProjectRootAsync } from './ProjectUtils';
 export async function getExpoSdkConfig(path: string) {
   try {
     const { projectRoot } = await findProjectRootAsync(path);
-    const { exp } = ConfigUtils.getConfig(projectRoot, { mode: 'production' });
+    const { exp } = ConfigUtils.getConfig(projectRoot, {
+      skipSDKVersionRequirement: true,
+      mode: 'production',
+    });
     return exp;
   } catch (error) {
     if (error.code !== 'NO_PROJECT') {
