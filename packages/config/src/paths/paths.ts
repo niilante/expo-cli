@@ -49,7 +49,7 @@ export function getEntryPoint(
   projectRoot: string,
   entryFiles: string[],
   platforms: string[],
-  mode: ConfigMode
+  mode: ConfigMode = 'development'
 ): string | null {
   const extensions = getManagedExtensions(platforms);
   return getEntryPointWithExtensions(projectRoot, entryFiles, extensions, mode);
@@ -60,7 +60,7 @@ export function getEntryPointWithExtensions(
   projectRoot: string,
   entryFiles: string[],
   extensions: string[],
-  mode: ConfigMode
+  mode: ConfigMode = 'development'
 ): string {
   const { exp, pkg } = getConfig(projectRoot, { skipSDKVersionRequirement: true, mode });
 
