@@ -122,7 +122,7 @@ type SelfHostedIndex = PublicConfig & {
   dependencies: string[];
 };
 
-type StartOptions = {
+export type StartOptions = {
   reset?: boolean;
   nonInteractive?: boolean;
   nonPersistent?: boolean;
@@ -2100,7 +2100,7 @@ export async function startExpoServerAsync(projectRoot: string): Promise<void> {
       const hostInfo = {
         host: hostUUID,
         server: 'xdl',
-        serverVersion: require('../package.json').version,
+        serverVersion: require('@expo/xdl/package.json').version,
         serverDriver: Config.developerTool,
         serverOS: os.platform(),
         serverOSVersion: os.release(),
