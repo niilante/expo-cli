@@ -1,9 +1,9 @@
 import fs from 'fs-extra';
 import { sync } from 'glob';
 import { join } from 'path';
+// @ts-ignore
 import { project as Project } from 'xcode';
 import plist, { PlistObject } from '@expo/plist';
-// @ts-ignore
 
 const defaultBundleId = '$(PRODUCT_BUNDLE_IDENTIFIER)';
 
