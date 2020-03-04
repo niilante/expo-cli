@@ -5,7 +5,7 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import glob from 'glob-promise';
 import minimatch from 'minimatch';
-import plist from '../tools/Plist';
+import plist from '@expo/plist';
 
 import { findP12CertSerialNumber, getP12CertFingerprint } from './PKCS12Utils';
 import { spawnAsyncThrowError } from './ExponentTools';
