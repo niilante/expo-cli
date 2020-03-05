@@ -11,13 +11,6 @@ async function buildAction(projectDir: string, options: Options) {
   if (!options.platform || !Object.values(Platform).includes(options.platform)) {
     throw new Error('Pass valid platform: [android|ios]');
   }
-  if (!options.type) {
-    options.type = BuildType.Generic;
-  }
-  // it will accept all types of builds but will fail later on unsupported types.
-  if (!Object.values(BuildType).includes(options.type)) {
-    throw new Error(`--type option must be 'generic' or 'managed'`);
-  }
   const user: User = await UserManager.ensureLoggedInAsync();
   const builder = new Builder(user);
   const buildArtifactUrl = await builder.buildProject(projectDir, options);
@@ -38,7 +31,6 @@ export default function(program: Command) {
       'Build an app binary for your project, signed and ready for submission to the Google Play Store / App Store.'
     )
     .option('-p --platform <platform>', 'Platform: [android|ios]', /^(android|ios)$/i)
-    .option('-t --type <type>', 'Type: [generic|managed|]', /^(generic|managed)$/i)
     .asyncActionProjectDir(buildAction);
 
   program

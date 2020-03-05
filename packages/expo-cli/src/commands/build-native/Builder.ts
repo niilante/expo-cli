@@ -38,12 +38,16 @@ export default class Builder {
     const tarPath = path.join(os.tmpdir(), `${uuidv4()}.tar.gz`);
     try {
       await makeProjectTarball(tarPath);
+
       const spinner = ora('Uploading project to server.').start();
       const { s3Url } = await this.client.uploadFile(tarPath);
       spinner.succeed('Project uploaded.');
+
       const job = await prepareJob(options, s3Url, projectDir);
       const { buildId } = await this.client.postAsync('builds', job);
+
       log(`Build logs: ${getLogsUrl(buildId)}`);
+
       return await waitForBuildEnd(this.client, buildId);
     } finally {
       await fs.remove(tarPath);

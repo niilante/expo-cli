@@ -2,37 +2,50 @@ import { Android, BuildConfig, BuildType, Job, JobSchema, Platform, iOS } from '
 
 export type Options = {
   platform: Platform;
-  type: BuildType;
 };
 
-async function prepareJob(options: Options, projectUrl: string, projectDir: string): Promise<Job> {
-  const credentials = await getPlatformCredentials(options.platform, projectDir);
-  const rawJob = {
-    credentials,
-    platform: options.platform,
-    projectUrl,
-    type: options.type,
-  };
-
-  const { value, error } = JobSchema.validate(rawJob);
+function validateJob(job: Job): Job {
+  console.log(job);
+  const { value, error } = JobSchema.validate(job);
   if (error) {
     throw error;
   } else {
-    return value as Job;
+    return value;
   }
 }
 
-async function getPlatformCredentials(
-  platform: Platform,
-  projectDir: string
-): Promise<Android.Credentials | iOS.Credentials> {
-  const jsonCredentials = await BuildConfig.read(projectDir);
-  if (platform === Platform.Android) {
-    return await BuildConfig.prepareAndroidJobCredentials(jsonCredentials);
-  } else if (platform === Platform.iOS) {
-    return await BuildConfig.prepareiOSJobCredentials(jsonCredentials);
-  } else {
-    throw new Error('Unsupported platform');
+async function prepareJob(options: Options, projectUrl: string, projectDir: string): Promise<Job> {
+  const turtleJson = await BuildConfig.read(projectDir);
+
+  switch (options.platform) {
+    case Platform.Android:
+      switch (turtleJson.type) {
+        case BuildType.Generic:
+          return validateJob(
+            await BuildConfig.prepareAndroidGenericJob(turtleJson, projectUrl, projectDir)
+          );
+        case BuildType.Managed:
+          return validateJob(
+            await BuildConfig.prepareAndroidManagedJob(turtleJson, projectUrl, projectDir)
+          );
+        default:
+          throw new Error('Unsupported build type');
+      }
+    case Platform.iOS:
+      switch (turtleJson.type) {
+        case BuildType.Generic:
+          return validateJob(
+            await BuildConfig.prepareiOSGenericJob(turtleJson, projectUrl, projectDir)
+          );
+        case BuildType.Managed:
+          return validateJob(
+            await BuildConfig.prepareiOSManagedJob(turtleJson, projectUrl, projectDir)
+          );
+        default:
+          throw new Error('Unsupported build type');
+      }
+    default:
+      throw new Error('Unsupported platform');
   }
 }
 
